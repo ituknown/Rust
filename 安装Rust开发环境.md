@@ -133,7 +133,7 @@ cargo 1.79.0 (ffa9cf99a 2024-06-03)
 
 # Windows 安装
 
-直接到官网下载 Windows 安装程序即可（[https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)），需要说明的是，做 Rust 开发需要 <ul>Microsoft C++ Build Tools</ul>  环境，否则安装时会提示类似如下信息：
+直接到官网下载 Windows 安装程序即可（[https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)），需要说明的是，做 Rust 开发需要 <u>Microsoft C++ Build Tools 环境</u>，否则安装时会提示类似如下信息：
 
 ```PowerShell
 PS C:\Users\WINDOWS\Downloads> .\rustup-init.exe
