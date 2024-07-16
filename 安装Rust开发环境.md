@@ -1,10 +1,8 @@
 # 前言
 
-rust 默认安装目录是 ~/.cargo，对于内存困难户来说很不友好（特别是 Windows C 盘困难户），所以我一般会修改默认安装位置。
+Rust 默认安装目录是 ~/.cargo，对于内存困难户来说很不友好（特别是 Windows C 盘困难户），所以我一般会修改默认安装位置。安装 Rust 环境时会读取两个环境变量： RUSTUP_HOME 和 CARGO_HOME，分别用于设置 rustup 和 cargo 安装目录（其中二进制可执行程序放在 $CARGO_HOME/bin 目录下）。
 
-rust 在安装时会读取两个环境变量： RUSTUP_HOME 和 CARGO_HOME。分别是 rustup 和 cargo 安装目录（其中二进制可执行程序放在 $CARGO_HOME/bin 目录下）。
-
-如果这两个环境变量不存在，就会默认安装在用户目录下的 .cargo 文件中。所以，修改默认安装目录只需要创建两个文件夹并配置对应的环境变量即可，以 Linux 为例（Windows同理）：
+如果这两个环境变量不存在，就会默认安装在当前用户 .cargo 目录。所以，修改默认安装目录只需要创建两个文件夹并配置对应的环境变量即可，以 Linux 为例（Windows同理）：
 
 创建目录：
 
@@ -23,7 +21,7 @@ export PATH=$PATH:$CARGO_HOME/bin
 
 其中 $CARGO_HOME/bin 目录不存在，不过先配置到 PATH 中，稍后就不需要配置了。
 
-对于 MacOS 用户来说，在 /usr/local 目录下创建的文件普通用户没有写和执行权限。因此最好实用 chmod 修改文件夹权限或使用 chmod 修改文件夹归属用户，我比较倾向 chmod 命令：
+对于 MacOS 用户来说，在 /usr/local 目录下创建的文件普通用户没有写和执行权限。因此最好使用 chmod 修改文件夹权限或使用 chown 修改文件夹所属用户，我比较倾向 chown 命令：
 
 ```bash
 sudo chown -R [user][:group] /usr/local/rust
@@ -31,7 +29,7 @@ sudo chown -R [user][:group] /usr/local/rust
 
 |**Note**|
 |:-------|
-|Linux 用户其实不需要修改权限，只需要使用超级管理员权限安装即可。|
+|Linux 用户其实不需要修改权限，只需要使用超级管理员权限（`sudo` 或 `sh - -c "command"`）安装即可。|
 
 # Linux 安装
 
@@ -123,7 +121,7 @@ This is usually done by running one of the following (note the leading DOT):
 source "/usr/local/rust/cargo/env.fish"  # For fish
 ```
 
-之后可以测试下安装是否 OK：
+之后重新打开命令终端测试下安装是否 OK：
 
 ```bash
 $ rustc -V
@@ -135,9 +133,7 @@ cargo 1.79.0 (ffa9cf99a 2024-06-03)
 
 # Windows 安装
 
-## 下载 Microsoft C++ 生成工具
-
-直接到官网下载 Windows 安装程序即可（[https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)），不过在 Windows 使用 Rust 需要 <ul>Microsoft C++ Build Tools</ul> 环境，如果没有 <ul>Microsoft C++ Build Tools</ul> 环境在安装时会提示类似如下信息：
+直接到官网下载 Windows 安装程序即可（[https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)），需要说明的是，做 Rust 开发需要 <ul>Microsoft C++ Build Tools</ul>  环境，否则安装时会提示类似如下信息：
 
 ```PowerShell
 PS C:\Users\WINDOWS\Downloads> .\rustup-init.exe
