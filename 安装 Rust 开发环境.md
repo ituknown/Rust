@@ -16,7 +16,7 @@ sudo mkdir -p /usr/local/lib/rust/cargo # 记得给该目录增加读写权限: 
 ```bash
 export RUSTUP_HOME=/usr/local/lib/rust/rustup
 export CARGO_HOME=/usr/local/lib/rust/cargo
-export PATH=$PATH:$CARGO_HOME/bin
+export PATH=$CARGO_HOME/bin:$PATH
 ```
 
 其中 $CARGO_HOME/bin 目录不存在，不过先配置到 PATH 中，稍后就不需要配置了。
