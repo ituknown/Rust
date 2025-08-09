@@ -7,24 +7,32 @@ Rust 默认安装目录是 ~/.cargo，对于内存困难户来说很不友好（
 创建目录：
 
 ```bash
-sudo mkdir -p /usr/local/rust/rustup
-sudo mkdir -p /usr/local/rust/cargo
+sudo mkdir -p /usr/local/lib/rust/rustup
+sudo mkdir -p /usr/local/lib/rust/cargo # 记得给该目录增加读写权限: chmod o+rw
 ```
 
 配置环境变量：
 
 ```bash
-export RUSTUP_HOME=/usr/local/rust/rustup
-export CARGO_HOME=/usr/local/rust/cargo
+export RUSTUP_HOME=/usr/local/lib/rust/rustup
+export CARGO_HOME=/usr/local/lib/rust/cargo
 export PATH=$PATH:$CARGO_HOME/bin
 ```
 
 其中 $CARGO_HOME/bin 目录不存在，不过先配置到 PATH 中，稍后就不需要配置了。
 
+另外，rust 二进制官方分发仓库地址是 [https://static.rust-lang.org](https://mirror.nju.edu.cn/)，由于网络原因对于国内用户来说，需要等待时间长一些，有概率因为网速等原因下载失败。
+
+官方也提供了可用于配置镜像仓库的环境变量 RUSTUP_DIST_SERVER 来加速下载/安装，以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例：
+
+```bash
+export RUSTUP_DIST_SERVER=https://mirror.nju.edu.cn/rustup
+```
+
 对于 MacOS 用户来说，在 /usr/local 目录下创建的文件普通用户没有写和执行权限。因此最好使用 chmod 修改文件夹权限或使用 chown 修改文件夹所属用户，我比较倾向 chown 命令：
 
 ```bash
-sudo chown -R [user][:group] /usr/local/rust
+sudo chown -R [user][:group] /usr/local/lib/rust
 ```
 
 |**Note**|
@@ -50,7 +58,7 @@ $ chmod +x rustup-init.sh
 $ ./rustup-init.sh --help
 ```
 
-不过我只需要使用 `--no-modify-path` 参数即可，该参数用于指定不自动配置环境变量（因为前面已经修改环境变量 PATH 了）。
+不过我只需要使用 `--no-modify-path` 参数即可，该参数用于指定不自动配置环境变量（==因为前面已经修改环境变量 PATH 了==）。
 
 ```bash
 $ bash rustup-init.sh --no-modify-path
@@ -69,20 +77,20 @@ programming language, and its package manager, Cargo.
 Rustup metadata and toolchains will be installed into the Rustup
 home directory, located at:
 
-  /usr/local/rust/rustup
+  /usr/local/lib/rust/rustup
 
 This can be modified with the RUSTUP_HOME environment variable.
 
 The Cargo home directory is located at:
 
-  /usr/local/rust/cargo
+  /usr/local/lib/rust/cargo
 
 This can be modified with the CARGO_HOME environment variable.
 
 The cargo, rustc, rustup and other commands will be added to
 Cargo's bin directory, located at:
 
-  /usr/local/rust/cargo/bin
+  /usr/local/lib/rust/cargo/bin
 
 This path needs to be in your PATH environment variable,
 but will not be added automatically.
@@ -93,7 +101,7 @@ these changes will be reverted.
 Current installation options:
 
 
-   default host triple: x86_64-apple-darwin
+   default host triple: x86_64-unknown-linux-gnu
      default toolchain: stable (default)
                profile: default
   modify PATH variable: no
@@ -104,21 +112,22 @@ Current installation options:
 >
 ```
 
-选择 1 或直接回车即可，安装完成后输出信息通常如下：
+选择 1 或直接回车即可，之后就是漫长的下载安装过程，安装完成后输出信息通常如下：
 
 ```
 Rust is installed now. Great!
 
-To get started you need Cargo's bin directory (/usr/local/rust/cargo/bin) in
-your PATH
+To get started you need Cargo's bin directory (/usr/local/lib/rust/cargo/bin)
+in your PATH
 environment variable. This has not been done automatically.
 
 To configure your current shell, you need to source
-the corresponding env file under /usr/local/rust/cargo.
+the corresponding env file under /usr/local/lib/rust/cargo.
 
 This is usually done by running one of the following (note the leading DOT):
-. "/usr/local/rust/cargo/env"            # For sh/bash/zsh/ash/dash/pdksh
-source "/usr/local/rust/cargo/env.fish"  # For fish
+. "/usr/local/lib/rust/cargo/env"            # For sh/bash/zsh/ash/dash/pdksh
+source "/usr/local/lib/rust/cargo/env.fish"  # For fish
+source $"/usr/local/lib/rust/cargo/env.nu"  # For nushell
 ```
 
 之后重新打开命令终端测试下安装是否 OK：
@@ -174,3 +183,90 @@ rustup update
 ```bash
 rustup self uninstall
 ```
+
+# 配置 crates 稀疏索引镜像
+
+Rust 依赖官方仓库地址 [https://crates.io/](https://crates.io/) 同样存在网络问题，在开发时下载依赖包经常需要花上几分钟甚至十几分钟。
+
+不过也可以配置国内镜像仓库地址，只需修改如下配置文件（如果没有则创建）：
+
+```bash
+$CARGO_HOME/config.toml
+```
+
+在配置文件中添加具体的镜像地址即可，还是以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例：
+
+```toml
+[source.crates-io]
+replace-with = 'mirror'
+
+[source.mirror]
+registry = "sparse+https://mirrors.cernet.edu.cn/crates.io-index/"
+
+[registries.mirror]
+index = "sparse+https://mirrors.cernet.edu.cn/crates.io-index/"
+```
+
+# 配置 crates 索引镜像
+
+如果你的  cargo 版本小于 1.68，只能通过开启 nightly 才能使用 稀疏索引。如果不想开启 nightly 还是使用普通的索引镜像吧。
+
+依然是修改 $CARGO_HOME/config.toml 文件，还是以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例，添加以下内容：
+
+```toml
+[source.crates-io]
+replace-with = 'mirror'
+
+[source.mirror]
+registry = "https://mirrors.cernet.edu.cn/crates.io-index.git"
+```
+
+# QAQ
+
+## error: linker 'cc' not found
+
+Rust 在编译时遇到 `error: linker 'cc' not found` 错误，主要是因为系统缺少 C 语言编译器（如 gcc 或 clang），而 Rust 在编译某些依赖 C 代码的库时需要调用 C 链接器（cc）。
+
+这个问题通常出现在 Linux/MacOS 中，因为在 Windows 安装 Rust 时都会勾选“使用C++的桌面开发（Desktop development with C++）”。
+
+下面 Linux/MacOS 解决方法：
+
+1. Debian/Ubuntu 安装 build-essential
+
+```bash
+sudo apt update -y
+sudo apt install -y build-essential
+```
+
+2. Fedora/RHEL/CentOS 安装 GCC
+
+```bash
+sudo dnf install gcc  # Fedora
+# 或
+sudo yum install gcc  # CentOS/RHEL
+```
+
+3. MacOS 安装 Xcode 命令行工具
+
+```bash
+xcode-select --install
+```
+
+安装完成之后可以执行下面命令检查 cc 是否可用：
+
+```bash
+$ cc --version
+
+cc (Debian 12.2.0-14+deb12u1) 12.2.0
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+```
+
+如果显示版本信息，说明问题已解决，重新编译 Rust 项目即可。
+
+--
+
+https://rust-lang.github.io/rustup/environment-variables.html
+
+https://mirror.nju.edu.cn/
