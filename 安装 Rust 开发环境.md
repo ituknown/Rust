@@ -1,6 +1,6 @@
 # 前言
 
-Rust 默认安装目录是 ~/.cargo，对于内存困难户来说很不友好（特别是 Windows C 盘困难户），所以我一般会修改默认安装位置。安装 Rust 环境时会读取两个环境变量： RUSTUP_HOME 和 CARGO_HOME，分别用于设置 rustup 和 cargo 安装目录（其中二进制可执行程序放在 $CARGO_HOME/bin 目录下）。
+Rust 默认安装目录是 `~/.cargo`，对于内存困难户来说很不友好（特别是 Windows C 盘困难户），所以我一般会修改默认安装位置。安装 Rust 环境时会读取两个环境变量： `RUSTUP_HOME` 和 `CARGO_HOME`，分别用于设置 rustup 和 cargo 安装目录（其中二进制可执行程序放在 `$CARGO_HOME/bin` 目录下）。
 
 如果这两个环境变量不存在，就会默认安装在当前用户 .cargo 目录。所以，修改默认安装目录只需要创建两个文件夹并配置对应的环境变量即可，以 Linux 为例（Windows同理）：
 
@@ -19,17 +19,17 @@ export CARGO_HOME=/usr/local/lib/rust/cargo
 export PATH=$CARGO_HOME/bin:$PATH
 ```
 
-其中 $CARGO_HOME/bin 目录不存在，不过先配置到 PATH 中，稍后就不需要配置了。
+其中 `$CARGO_HOME/bin` 目录不存在，不过先配置到 PATH 中，稍后就不需要配置了。
 
 另外，rust 二进制官方分发仓库地址是 [https://static.rust-lang.org](https://mirror.nju.edu.cn/)，由于网络原因对于国内用户来说，需要等待时间长一些，有概率因为网速等原因下载失败。
 
-官方也提供了可用于配置镜像仓库的环境变量 RUSTUP_DIST_SERVER 来加速下载/安装，以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例：
+官方也提供了可用于配置镜像仓库的环境变量 `RUSTUP_DIST_SERVER` 来加速下载/安装，以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例：
 
 ```bash
 export RUSTUP_DIST_SERVER=https://mirror.nju.edu.cn/rustup
 ```
 
-对于 MacOS 用户来说，在 /usr/local 目录下创建的文件普通用户没有写和执行权限。因此最好使用 chmod 修改文件夹权限或使用 chown 修改文件夹所属用户，我比较倾向 chown 命令：
+对于 MacOS 用户来说，在 `/usr/local` 目录下创建的文件普通用户没有写和执行权限。因此最好使用 chmod 修改文件夹权限或使用 chown 修改文件夹所属用户，我比较倾向 chown 命令：
 
 ```bash
 sudo chown -R [user][:group] /usr/local/lib/rust
@@ -58,13 +58,13 @@ $ chmod +x rustup-init.sh
 $ ./rustup-init.sh --help
 ```
 
-不过我只需要使用 `--no-modify-path` 参数即可，该参数用于指定不自动配置环境变量（==因为前面已经修改环境变量 PATH 了==）。
+**不过我只需要使用 `--no-modify-path` 参数即可，该参数用于指定不自动配置环境变量（因为前面已经修改环境变量 PATH 了）。**
 
 ```bash
 $ bash rustup-init.sh --no-modify-path
 ```
 
-之后会输出一些信息，包括 rustup 及 cargo 安装位置。如果没有设置环境变量（RUSTUP_HOME 和 CARGO_HOME）默认安装位置就会是 ~/.cargo：
+之后会输出一些信息，包括 rustup 及 cargo 安装位置。如果没有设置环境变量（`RUSTUP_HOME` 和 `CARGO_HOME`）默认安装位置就会是 `~/.cargo`：
 
 ```
 info: downloading installer
