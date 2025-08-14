@@ -23,10 +23,10 @@ export PATH=$CARGO_HOME/bin:$PATH
 
 另外，rust 二进制官方分发仓库地址是 [https://static.rust-lang.org](https://mirror.nju.edu.cn/)，由于网络原因对于国内用户来说，需要等待时间长一些，有概率因为网速等原因下载失败。
 
-官方也提供了可用于配置镜像仓库的环境变量 `RUSTUP_DIST_SERVER` 来加速下载/安装，以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例：
+官方也提供了可用于配置镜像仓库的环境变量 `RUSTUP_DIST_SERVER` 来加速下载/安装，比如 [南京大学开源镜像站](https://mirror.nju.edu.cn/)、[RsProxy.cn](https://rsproxy.cn/)。这里以 [RsProxy.cn](https://rsproxy.cn/) 为例：
 
 ```bash
-export RUSTUP_DIST_SERVER=https://mirror.nju.edu.cn/rustup
+export RUSTUP_DIST_SERVER=https://rsproxy.cn
 ```
 
 对于 MacOS 用户来说，在 `/usr/local` 目录下创建的文件普通用户没有写和执行权限。因此最好使用 chmod 修改文件夹权限或使用 chown 修改文件夹所属用户，我比较倾向 chown 命令：
@@ -194,17 +194,23 @@ Rust 依赖官方仓库地址 [https://crates.io/](https://crates.io/) 同样存
 $CARGO_HOME/config.toml
 ```
 
-在配置文件中添加具体的镜像地址即可，还是以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例：
+在配置文件中添加具体的镜像地址即可，还是以 [RsProxy.cn](https://rsproxy.cn/) 为例：
 
 ```toml
 [source.crates-io]
-replace-with = 'mirror'
+replace-with = 'rsproxy-sparse'
 
-[source.mirror]
-registry = "sparse+https://mirrors.cernet.edu.cn/crates.io-index/"
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
 
-[registries.mirror]
-index = "sparse+https://mirrors.cernet.edu.cn/crates.io-index/"
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+
+[net]
+git-fetch-with-cli = true
 ```
 
 # 配置 crates 索引镜像
