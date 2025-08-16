@@ -23,7 +23,9 @@ export PATH=$CARGO_HOME/bin:$PATH
 
 另外，rust 二进制官方分发仓库地址是 [https://static.rust-lang.org](https://mirror.nju.edu.cn/)，由于网络原因对于国内用户来说，需要等待时间长一些，有概率因为网速等原因下载失败。
 
-官方也提供了可用于配置镜像仓库的环境变量 `RUSTUP_DIST_SERVER` 来加速下载/安装，比如 [南京大学开源镜像站](https://mirror.nju.edu.cn/)、[RsProxy.cn](https://rsproxy.cn/)。这里以 [RsProxy.cn](https://rsproxy.cn/) 为例：
+官方也提供了可用于配置镜像仓库的环境变量 `RUSTUP_DIST_SERVER` 来加速下载/安装，比如 [南京大学开源镜像站](https://mirror.nju.edu.cn/mirrorz-help/rustup/)、[清华大学开源软件镜像站](https://mirrors.tuna.tsinghua.edu.cn/help/rustup/)、[RsProxy](https://rsproxy.cn/)。
+
+这里以 [RsProxy.cn](https://rsproxy.cn/) 为例：
 
 ```bash
 export RUSTUP_DIST_SERVER=https://rsproxy.cn
@@ -37,7 +39,7 @@ sudo chown -R [user][:group] /usr/local/lib/rust
 
 |**Note**|
 |:-------|
-|Linux 用户其实不需要修改权限，只需要使用超级管理员权限（`sudo` 或 `sh - -c "command"`）安装即可。|
+|Linux 用户其实不需要修改权限，只需要使用超级管理员权限（`sudo` 或 `sh - -c "command"`）安装即可|
 
 # Linux 安装
 
@@ -184,6 +186,12 @@ rustup update
 rustup self uninstall
 ```
 
+# 显示工具链信息
+
+```bash
+rustup show
+```
+
 # 配置 crates 稀疏索引镜像
 
 Rust 依赖官方仓库地址 [https://crates.io/](https://crates.io/) 同样存在网络问题，在开发时下载依赖包经常需要花上几分钟甚至十几分钟。
@@ -194,7 +202,7 @@ Rust 依赖官方仓库地址 [https://crates.io/](https://crates.io/) 同样存
 $CARGO_HOME/config.toml
 ```
 
-在配置文件中添加具体的镜像地址即可，还是以 [RsProxy.cn](https://rsproxy.cn/) 为例：
+在配置文件中添加具体的镜像地址即可，还是以 [RsProxy](https://rsproxy.cn/) 为例（你也可以使用 清华大学、南京大学等镜像站）：
 
 ```toml
 [source.crates-io]
@@ -217,7 +225,7 @@ git-fetch-with-cli = true
 
 如果你的  cargo 版本小于 1.68，只能通过开启 nightly 才能使用 稀疏索引。如果不想开启 nightly 还是使用普通的索引镜像吧。
 
-依然是修改 $CARGO_HOME/config.toml 文件，还是以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例，添加以下内容：
+依然是修改 `$CARGO_HOME/config.toml` 文件，这回以 [南京大学开源镜像站](https://mirror.nju.edu.cn/) 为例，添加以下内容：
 
 ```toml
 [source.crates-io]
