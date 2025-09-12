@@ -1,6 +1,15 @@
 ### PgSQL
 
 ```bash
+# 清理旧版本 
+cargo uninstall diesel_cli
+
+# 重新安装 diesel_cli, 只启用 mysql 
+cargo install diesel_cli --no-default-features --features mysql
+```
+
+
+```bash
 export PQ_HOME=/Users/ituknown/pgsql_17_6
 export PQ_LIB_DIR=$PQ_HOME/lib
 export PQ_INCLUDE_DIR=$PQ_HOME/include
@@ -8,6 +17,14 @@ export DYLD_LIBRARY_PATH=$PQ_LIB_DIR:$DYLD_LIBRARY_PATH
 ```
 
 ### MySQL
+
+```bash
+# 清理旧版本 
+cargo uninstall diesel_cli
+
+# 重新安装 diesel_cli, 只启用 postgres 
+cargo install diesel_cli --no-default-features --features postgres
+```
 
 ```bash
 export MYSQL_HOME=/Users/ituknown/mysql_8_4_6
