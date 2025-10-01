@@ -10,23 +10,38 @@ cargo uninstall diesel_cli
 cargo install diesel_cli --no-default-features --features postgres
 ```
 
-配置 RUSTFLAGS（推荐）：
+配置动态库：
+
+Linux：
+
+```bash
+export PQ_HOME=/Users/ituknown/pgsql_17_6
+export LD_LIBRARY_PATH=$PQ_HOME/lib:$LD_LIBRARY_PATH
+```
+
+Mac：
+
+```bash
+export PQ_HOME=/Users/ituknown/pgsql_17_6
+export DYLD_LIBRARY_PATH=$PQ_HOME/lib:$DYLD_LIBRARY_PATH
+```
+
+Windows：
+
+```bash
+# 配置环境变量
+PQ_HOME = "D:\postgresql-18.0"
+
+# PATH 添加: 
+%PQ_HOME%\lib
+%PQ_HOME%\bin
+```
+
+如果使用 rustc 编译，可以配置 RUSTFLAGS：
 
 ```bash
 export PQ_HOME=/Users/ituknown/pgsql_17_6
 export RUSTFLAGS="-L$PQ_HOME/lib"
-
-# include 可以不配置
-export RUSTFLAGS="$RUSTFLAGS -I$PQ_HOME/include"
-```
-
-或使用环境变量和动态库方式（不推荐）：
-
-```bash
-export PQ_HOME=/Users/ituknown/pgsql_17_6
-export PQ_LIB_DIR=$PQ_HOME/lib
-export PQ_INCLUDE_DIR=$PQ_HOME/include
-export DYLD_LIBRARY_PATH=$PQ_LIB_DIR:$DYLD_LIBRARY_PATH
 ```
 
 ### MySQL
